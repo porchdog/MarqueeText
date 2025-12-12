@@ -14,7 +14,7 @@ public struct MarqueeText: View {
   /// Spacing between the repeated text instances during animation
   @State private var spacing: CGFloat
 	
-  @State private var animation: Animation
+  @State private var animation: Animation?
 
   /// The measured size of the text content
   @State private var textSize: CGSize = .zero
@@ -46,13 +46,11 @@ public struct MarqueeText: View {
   ///   - spacing: Spacing between repeated text instances during animation (default: 50)
   public init(
     _ text: LocalizedStringResource,
-	animation: Animation,
-	animate: Bool = true,
+	animation: Animation?,
     delay: TimeInterval = 1.0,
     spacing: CGFloat = 50
   ) {
     self.text = text
-	self.animate = animate
     self.delay = delay
 	  self.animation = animation
     self.spacing = spacing
@@ -88,7 +86,7 @@ public struct MarqueeText: View {
           }
           // Animate the entire HStack from right to left
           .offset(x: animate ? -textSize.width - spacing : 0)
-          .animation(animate ? animation.delay(delay).repeatForever(autoreverses: false) : .default, value: animate)
+          .animation(animate ? animation?.delay(delay).repeatForever(autoreverses: false) : nil, value: animate)
         }
         .frame(width: containerWidth, height: textSize.height, alignment: .leading)
         .clipped() // Hide overflow to create the marquee effect
@@ -96,6 +94,9 @@ public struct MarqueeText: View {
         .accessibilityLabel(text)
         .accessibilityHint("Scrolling text")
         .accessibilityAddTraits([.updatesFrequently, .startsMediaSession])
+		.onAppear {
+			animate = true
+		}
       } else {
         // Static text - when text fits in container
         Text(text)
@@ -112,7 +113,7 @@ public struct MarqueeText: View {
           .accessibilityElement(children: .combine)
           .accessibilityLabel(text)
           .onAppear {
-            animate = false
+			  animate = false
           }
       }
     }
