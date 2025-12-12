@@ -6,15 +6,15 @@ import SwiftUI
 /// horizontal scrolling animation. When text fits within the container, it displays as static text.
 public struct MarqueeText: View {
   /// The text content to display
-  private let text: LocalizedStringResource
+  @State private var text: LocalizedStringResource
 
   /// Delay before the animation starts in seconds
-  private let delay: TimeInterval
+  @State private var delay: TimeInterval
 
   /// Spacing between the repeated text instances during animation
-  private let spacing: CGFloat
+  @State private var spacing: CGFloat
 	
-  private let animation: Animation
+  @State private var animation: Animation
 
   /// The measured size of the text content
   @State private var textSize: CGSize = .zero
@@ -86,14 +86,7 @@ public struct MarqueeText: View {
           }
           // Animate the entire HStack from right to left
           .offset(x: animate ? -textSize.width - spacing : 0)
-          .animation(
-            animate
-              ? animation
-              .delay(delay)
-              .repeatForever(autoreverses: false)
-              : .default,
-            value: animate
-          )
+          .animation(animate ? animation.delay(delay).repeatForever(autoreverses: false) : .default, value: animate)
         }
         .frame(width: containerWidth, height: textSize.height, alignment: .leading)
         .clipped() // Hide overflow to create the marquee effect
