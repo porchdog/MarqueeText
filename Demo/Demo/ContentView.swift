@@ -21,7 +21,7 @@ struct ContentView: View {
 
         // Main showcase
         section(title: "Main Showcase") {
-          MarqueeText("🚀 This is a spectacular marquee text that scrolls beautifully across the screen with smooth animations and perfect timing! ✨")
+			MarqueeText("🚀 This is a spectacular marquee text that scrolls beautifully across the screen with smooth animations and perfect timing! ✨", animation: .linear(duration: 10), delay: 0)
             .font(.title2)
             .fontWeight(.medium)
             .foregroundStyle(.primary)

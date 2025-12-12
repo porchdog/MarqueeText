@@ -8,36 +8,51 @@ public struct MarqueeText: View {
   /// The text content to display
   private let text: LocalizedStringResource
 
-  /// Duration of the scrolling animation in seconds
-  private let duration: TimeInterval
-
   /// Delay before the animation starts in seconds
   private let delay: TimeInterval
 
   /// Spacing between the repeated text instances during animation
   private let spacing: CGFloat
+	
+  private let animation: Animation
 
   /// The measured size of the text content
   @State private var textSize: CGSize = .zero
 
   /// Controls whether the marquee animation should be active
   @State private var animate: Bool = false
+	
+	/// Creates a new MarqueeText view
+	/// - Parameters:
+	///   - text: The text content to display
+	///   - delay: Delay before the animation starts in seconds (default: 1.0)
+	///   - spacing: Spacing between repeated text instances during animation (default: 50)
+	public init(
+		_ text: LocalizedStringResource,
+		duration: TimeInterval = 8.0,
+		delay: TimeInterval = 1.0,
+		spacing: CGFloat = 50
+	) {
+		self.text = text
+		self.delay = delay
+		self.animation = .easeInOut(duration: duration)
+		self.spacing = spacing
+	}
 
   /// Creates a new MarqueeText view
   /// - Parameters:
   ///   - text: The text content to display
-  ///   - duration: Duration of the scrolling animation in seconds (default: 8.0)
   ///   - delay: Delay before the animation starts in seconds (default: 1.0)
   ///   - spacing: Spacing between repeated text instances during animation (default: 50)
   public init(
     _ text: LocalizedStringResource,
-    duration: TimeInterval = 8.0,
+	animation: Animation,
     delay: TimeInterval = 1.0,
     spacing: CGFloat = 50
   ) {
     self.text = text
-    self.duration = duration
     self.delay = delay
+	  self.animation = animation
     self.spacing = spacing
   }
 
@@ -73,7 +88,7 @@ public struct MarqueeText: View {
           .offset(x: animate ? -textSize.width - spacing : 0)
           .animation(
             animate
-              ? Animation.easeInOut(duration: duration)
+              ? animation
               .delay(delay)
               .repeatForever(autoreverses: false)
               : .default,
