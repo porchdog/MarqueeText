@@ -47,10 +47,12 @@ public struct MarqueeText: View {
   public init(
     _ text: LocalizedStringResource,
 	animation: Animation,
+	animate: Bool = true,
     delay: TimeInterval = 1.0,
     spacing: CGFloat = 50
   ) {
     self.text = text
+	self.animate = animate
     self.delay = delay
 	  self.animation = animation
     self.spacing = spacing
@@ -94,9 +96,6 @@ public struct MarqueeText: View {
         .accessibilityLabel(text)
         .accessibilityHint("Scrolling text")
         .accessibilityAddTraits([.updatesFrequently, .startsMediaSession])
-        .onAppear {
-          animate = true
-        }
       } else {
         // Static text - when text fits in container
         Text(text)
